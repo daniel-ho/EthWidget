@@ -4,8 +4,8 @@
     android:initialLayout="@layout/eth_widget"
     android:minHeight="40dp"
     android:minWidth="320dp"
-    android:previewImage="@drawable/example_appwidget_preview"
-    android:resizeMode="horizontal|vertical"
+    android:previewImage="@drawable/ethwidget_prev"
+    android:resizeMode="horizontal"
     android:updatePeriodMillis="900000"
     android:widgetCategory="home_screen">
 </appwidget-provider>
