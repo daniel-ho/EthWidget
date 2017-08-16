@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">EthWidget</string>
+    <string name="price_text">Ethereum Price</string>
+    <string name="updateTime_text">Update Time</string>
+    <string name="percentage_text">Percentage Change</string>
+    <string name="add_widget">Add widget</string>
 </resources>
