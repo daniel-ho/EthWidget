@@ -1,8 +1,12 @@
 package layout;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.widget.RemoteViews;
 
 import org.json.JSONObject;
@@ -20,6 +24,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import io.github.daniel_ho.ethwidget.R;
+
+//TODO: Create configuration activity file to choose background color
 
 /**
  * Implementation of App Widget functionality.
@@ -56,7 +62,7 @@ public class EthWidget extends AppWidgetProvider {
         price = "1 ETH = $" + String.format("%.2f", price_d);
         percent_change = "24 Hour Change: " + String.format("%.2f", percent_change_d) + "%";
 
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+1:00"));
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT-7:00"));
         Date currentLocalTime = cal.getTime();
         DateFormat date = new SimpleDateFormat("M/d hh:mm a");
         date.setTimeZone(TimeZone.getTimeZone("GMT-7:00"));
@@ -67,6 +73,11 @@ public class EthWidget extends AppWidgetProvider {
         views.setTextViewText(R.id.price_text, price);
         views.setTextViewText(R.id.percentage_text, percent_change);
         views.setTextViewText(R.id.updateTime_text, localTime);
+
+        Intent intent = new Intent(context, EthWidget.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        PendingIntent pIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setOnClickPendingIntent(R.id.refreshButton, pIntent);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -79,6 +90,17 @@ public class EthWidget extends AppWidgetProvider {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+        if (intent.getAction().equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
+            AppWidgetManager manager = AppWidgetManager.getInstance(context);
+            ComponentName component = new ComponentName(context, EthWidget.class);
+            onUpdate(context, manager, manager.getAppWidgetIds(component));
+        }
+    }
+
 
     // Credits: https://stackoverflow.com/a/34691486
     public static JSONObject getJSONObjectFromURL(String urlString) throws IOException, JSONException {
