@@ -20,13 +20,11 @@ import com.android.volley.toolbox.Volley;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
+import java.util.Locale;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import io.github.daniel_ho.ethwidget.R;
-
-//TODO: Create configuration activity file to choose background color
 
 /**
  * Implementation of App Widget functionality.
@@ -41,7 +39,6 @@ public class EthWidget extends AppWidgetProvider {
         if (requestQueue == null) {
             requestQueue = Volley.newRequestQueue(context);
         }
-        // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
             final int id = appWidgetId;
 
@@ -91,10 +88,9 @@ public class EthWidget extends AppWidgetProvider {
             e.printStackTrace();
         }
 
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT-7:00"));
+        Calendar cal = Calendar.getInstance(Locale.getDefault());
         Date currentLocalTime = cal.getTime();
         DateFormat date = new SimpleDateFormat("M/d hh:mm a");
-        date.setTimeZone(TimeZone.getTimeZone("GMT-7:00"));
         String localTime = "Updated " + date.format(currentLocalTime);
 
         // Construct the RemoteViews object
