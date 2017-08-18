@@ -31,6 +31,7 @@ import io.github.daniel_ho.ethwidget.R;
  */
 public class EthWidget extends AppWidgetProvider {
 
+    // URL to retrieve data ETH/USD data
     public String url = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=ETH&tsyms=USD";
     public RequestQueue requestQueue = null;
 
@@ -39,6 +40,7 @@ public class EthWidget extends AppWidgetProvider {
         if (requestQueue == null) {
             requestQueue = Volley.newRequestQueue(context);
         }
+        // Update all instances of widget
         for (int appWidgetId : appWidgetIds) {
             final int id = appWidgetId;
 
@@ -48,6 +50,7 @@ public class EthWidget extends AppWidgetProvider {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
+                                // Callback function to update widget views
                                 updateData(context, appWidgetManager, id, response);
                             } catch(JSONException e) {
                                 e.printStackTrace();
@@ -66,6 +69,7 @@ public class EthWidget extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
+        // Call onUpdate if refresh button is pressed
         if (intent.getAction().equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
             AppWidgetManager manager = AppWidgetManager.getInstance(context);
             ComponentName component = new ComponentName(context, EthWidget.class);
@@ -75,6 +79,7 @@ public class EthWidget extends AppWidgetProvider {
 
     private void updateData(Context context, AppWidgetManager appWidgetManager, int appWidgetId, JSONObject response) throws JSONException {
 
+        // Get current price and percent values
         String price = context.getString(R.string.price_text);
         String percent_change = context.getString(R.string.percentage_text);
 
@@ -88,12 +93,13 @@ public class EthWidget extends AppWidgetProvider {
             e.printStackTrace();
         }
 
+        // Retrieve time in phone's local time zone
         Calendar cal = Calendar.getInstance(Locale.getDefault());
         Date currentLocalTime = cal.getTime();
         DateFormat date = new SimpleDateFormat("M/d hh:mm a");
         String localTime = "Updated " + date.format(currentLocalTime);
 
-        // Construct the RemoteViews object
+        // Construct the RemoteViews object and set text data
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.eth_widget);
         views.setTextViewText(R.id.price_text, price);
         views.setTextViewText(R.id.percentage_text, percent_change);
