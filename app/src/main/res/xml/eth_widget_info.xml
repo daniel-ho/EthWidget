@@ -3,7 +3,7 @@
     android:initialKeyguardLayout="@layout/eth_widget"
     android:initialLayout="@layout/eth_widget"
     android:minHeight="40dp"
-    android:minWidth="320dp"
+    android:minWidth="250dp"
     android:previewImage="@drawable/ethwidget_prev"
     android:resizeMode="horizontal"
     android:updatePeriodMillis="3600000"
